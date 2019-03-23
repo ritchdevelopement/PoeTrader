@@ -1,0 +1,16 @@
+.item {
+    margin-bottom: 15px;
+}
+.item-image-container {
+	height: 200px;
+	display: flex;
+	justify-content: center;
+}
+.item-image-container .card-img-top {
+    max-width: 100%;
+    width: auto;
+    align-self: center;
+}
+.card-title {
+	height: 50px;
+}
