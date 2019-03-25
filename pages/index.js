@@ -8,6 +8,7 @@ import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 
 import LeagueSelect from '../components/LeagueSelect'
+import TypeSelect from '../components/TypeSelect'
 import ItemList from '../components/ItemList'
 
 import '../styles/Index.css'
@@ -18,41 +19,51 @@ class Index extends Component {
 
     this.state = {
       filter: {
-        league: "Standard"
+        league: "Standard",
+        type: "All"
       }
     }
 
+    this.typeSelect = this.typeSelect.bind(this);
     this.leagueSelect = this.leagueSelect.bind(this);
   }
 
   leagueSelect(event) {
-    this.setState({filter: {
-      league: event.target.value
-    }})
+    let filter = {...this.state.filter}
+    filter.league = event.target.value
+    this.setState({filter})
+  }
+
+  typeSelect(event) {
+    let filter = {...this.state.filter}
+    filter.type = event.target.value
+    this.setState({filter})
   }
 
   render() {
+    const { filter } = this.state
+    const { leagues, stashes} = this.props
     return (
       <div>
         <Navbar bg="dark" variant="dark" sticky="top">
           <Container fluid="true">
-          <Col sm={12} style={{padding:0}}>
-            <Navbar.Brand href="#home">
-              <h1>PoE Trader</h1>
-            </Navbar.Brand>
-            <Row>
-            <Col sm={4} md={3}>
-              <LeagueSelect formTitle="Leagues" leagues={this.props.leagues} leagueSelect={this.leagueSelect}/>
+            <Col sm={12} style={{padding:0}}>
+              <Navbar.Brand href="#home">
+                <h1>PoE Trader</h1>
+              </Navbar.Brand>
+              <Row>
+                <Col sm={4} md={3}>
+                  <LeagueSelect formTitle="League" leagues={leagues} leagueSelect={this.leagueSelect}/>
+                </Col>
+                <Col sm={4} md={3}>
+                  <TypeSelect formTitle="Type" stashes={stashes} typeSelect={this.typeSelect}/>
+                </Col>
+              </Row>
             </Col>
-            <Col sm={4} md={3}>
-              
-            </Col>
-            </Row>
-          </Col>
           </Container>
         </Navbar>
         <Container fluid="true" className="content">
-          <ItemList stashes={this.props.stashes} filter={this.state.filter}/>
+          <ItemList stashes={stashes} filter={filter}/>
         </Container>
       </div>
     );
@@ -61,16 +72,13 @@ class Index extends Component {
 
 Index.getInitialProps = async function() {
   const resLeagues = await fetch('http://api.pathofexile.com/leagues?type=main')
-  
+  const dataLeagues = await resLeagues.json()
 
   const resChangeId = await fetch('https://api.poe.watch/id')
   const dataChangeId = await resChangeId.json()
-  console.log(dataChangeId.id)
   const resStashes = await fetch('https://www.pathofexile.com/api/public-stash-tabs?id=' + dataChangeId.id)
-
-  const dataLeagues = await resLeagues.json()
   const dataStashes = await resStashes.json()
-
+  
   return {
     leagues: dataLeagues,
     stashes: dataStashes.stashes

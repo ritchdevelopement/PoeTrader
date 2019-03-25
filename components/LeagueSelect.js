@@ -3,7 +3,8 @@ import '../styles/Select.css'
 
 const LeagueSelect = (props) => {
     let leagues = []
-    props.leagues.forEach(function(league) {
+
+    props.leagues.forEach(function(league) { 
         if(!league.id.includes('SSF')) {
             leagues.push(league)
         }
