@@ -1,6 +1,7 @@
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import Col from 'react-bootstrap/Col'
+import ListGroup from 'react-bootstrap/ListGroup'
 
 import '../styles/Item.css'
 
@@ -15,10 +16,30 @@ const Item = (props) => {
                 </div>
                 <Card.Body>
                     <Card.Title>{props.item.typeLine}<br/>{props.item.name}</Card.Title>
-                    <Card.Text>
-                    Some quick example text to build on the card title and make up the bulk of
-                    the card's content.
-                    </Card.Text>
+                    <Card.Header>Implicit Mods</Card.Header>
+                    <ListGroup variant="flush">
+                        {
+                            props.item.implicitMods
+                            ? props.item.implicitMods.map(imod => 
+                                <ListGroup.Item>{imod}</ListGroup.Item>
+
+                            )
+                            : ""
+                            
+                        }
+                    </ListGroup>
+                    <Card.Header>Explicit Mods</Card.Header>
+                    <ListGroup variant="flush">
+                        {
+                            props.item.explicitMods
+                            ? props.item.explicitMods.map(emod => 
+                                <ListGroup.Item>{emod}</ListGroup.Item>
+
+                            )
+                            : ""
+                            
+                        }
+                    </ListGroup>
                     <div className="button-container">
                         <Button variant="primary">Copy to Clipboard</Button>
                     </div>
